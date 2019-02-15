@@ -2,7 +2,7 @@ defmodule Reversi.game do
 
   # generate initial game state
   def init do
-      %{
+      state = %{
         board: init_board(),
         on_going: true,
         current_player: "black"
@@ -10,7 +10,7 @@ defmodule Reversi.game do
   end
 
   def client_view(game) do
-    state = %{
+    %{
       board: game[:board],
       on_going: game[:on_going],
     }
