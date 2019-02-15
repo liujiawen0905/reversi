@@ -3,21 +3,27 @@ defmodule Reversi.game do
   # generate initial game state
   def init do
       %{
-        board: init_board(), 
-        on_going: true, 
+        board: init_board(),
+        on_going: true,
         current_player: "black"
       }
   end
 
   def client_view(game) do
-    %{board: game[:board], on_going: game[:on_going]}
+    state = %{
+      board: game[:board],
+      on_going: game[:on_going],
+    }
   end
 
   #generate initial board (8x8) [[]*8]
   #each element in board is a %{x:x_position, y:y_position, color: player_color}
   #player_color is one of "", "black", "white"
   def init_board() do
-    board=[]
+    xy = [0, 1, 2, 3, 4, 5, 6, 7]
+    cells = Enum.map(xy, fn(a) ->
+      Enum.map(xy, fn(b) -> %{x: a, y: b, color: ""} end) end)
+    Map.put(state, :board, cells)
   end
 
   #when user click a button this method should be triggered
@@ -32,7 +38,7 @@ defmodule Reversi.game do
     game
     |> Map.put(:board, new_board)
     |> Map.put(:on_going, new_on_going)
-    |> Map.put(:current_player, next_player(game.current_player))  
+    |> Map.put(:current_player, next_player(game.current_player))
   end
 
   defp next_player("black") do
@@ -45,12 +51,12 @@ defmodule Reversi.game do
 
   #flip grids and generate a new board
   defp flip(board, x, y, color) do
-    board
+    row = Enum.at(board, x)
+    cell = Enum.at(row , y)
+    newRow = List.replace_at(row, y, %{x: x, y: y, color: color})
+    newBoard = List.replace(board, x, newRow)
+    Map.put(state, :board, newBoard)
   end
 
 
 end
-
-
-
-
