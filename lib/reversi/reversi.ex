@@ -58,5 +58,14 @@ defmodule Reversi.game do
     Map.put(state, :board, newBoard)
   end
 
+  defp check_finished(board) do
+    empty_cell = Enum.map(board, fn(row) ->
+      Enum.find(row, 0,fn(map) -> map[:color] == "" end) end)
 
+      if empty_cell == 0 do
+        true
+      else
+        false
+      end
+  end
 end
