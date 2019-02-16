@@ -23,18 +23,29 @@ defmodule Reversi.Game do
   def init_board() do
     xy = [0, 1, 2, 3, 4, 5, 6, 7]
     cells = Enum.map(xy, fn(a) ->
-      Enum.map(xy, fn(b) -> %{x: a, y: b, color: ""} end) end)
+      Enum.map(xy, fn(b) ->
+        cond do
+          (a==3 and b==4) or (a==4 and b==3) -> 
+            %{x: a, y: b, color: "black"}
+          (a==3 and b==3) or (a==4 and b==4) ->
+            %{x: a, y: b, color: "white"} 
+          true ->
+            %{x: a, y: b, color: ""}
+        end 
+      end) 
+    end)
     cells
   end
 
   #when user click a button this method should be triggered
   def click(game, x, y) do
-    if get_grid(game.board, x, y).color == "" do
+    if get_grid(game.board, x, y).color == "" and valid_move(game, x, y) do
       color = game.current_player
       #1)check if button's color is "" (button has not been clicked)
       #2)call flip(game.board, x, y) to generate a new board
       #3)add current chess to the board
-      new_board = flip(game.board, x, y, color)
+      flips = get_flips(game.board, x, y, color)
+      new_board = flip_all(flips, game.board)
       new_board = add_chess(new_board, x, y, color)
       #3)check if game ends
       new_on_going = not check_finished(new_board)
@@ -46,6 +57,10 @@ defmodule Reversi.Game do
     else
       game
     end
+  end
+
+  def valid_move(game, x, y) do
+    length(get_flips(game.board, x, y, game.current_player)) > 0
   end
 
   def add_chess(board, x, y, color) do
@@ -63,8 +78,8 @@ defmodule Reversi.Game do
     "black"
   end
 
-  #flip grids and generate a new board
-  def flip(board, x, y, color) do
+  #get all grids that need to be flipped
+  def get_flips(board, x, y, color) do
     posn=%{x: x, y: y}
     waiting_list=[]
     waiting_list
@@ -84,7 +99,6 @@ defmodule Reversi.Game do
     |> Enum.concat(flip_helper(board, [], %{x: -1, y: 1}, posn, color))
     #check down-left
     |> Enum.concat(flip_helper(board, [], %{x: -1, y: -1}, posn, color))
-    |> flip_all(board)
   end
 
   def flip_all(wl, board) do
