@@ -59,10 +59,10 @@ defmodule Reversi.game do
   end
 
   defp check_finished(board) do
-    empty_cell = Enum.map(board, fn(row) ->
+    check_list = Enum.map(board, fn(row) ->
       Enum.find(row, 0,fn(map) -> map[:color] == "" end) end)
 
-      if empty_cell == 0 do
+      if Enum.all?(check_list, fn(x) -> x == 0 end) do
         true
       else
         false
