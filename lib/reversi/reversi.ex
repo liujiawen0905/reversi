@@ -112,6 +112,7 @@ defmodule Reversi.Game do
     |> Enum.at(y)
   end
 
+<<<<<<< HEAD
   #move is where the player placed a new chess (%{x, y})
   #direc represents which direction we are checking along (ex: {x:1, y:1} means top right)
   #posn is the position we will be checking next
@@ -135,6 +136,15 @@ defmodule Reversi.Game do
       end
     end
 
+  defp check_finished(board) do
+    check_list = Enum.map(board, fn(row) ->
+      Enum.find(row, 0,fn(map) -> map[:color] == "" end) end)
+
+      if Enum.all?(check_list, fn(x) -> x == 0 end) do
+        true
+      else
+        false
+      end
   end
 end
 
