@@ -141,7 +141,7 @@ defmodule Reversi.Game do
           acc
         #met an empty tile along the way, stop searching
         target.color=="" ->
-          acc  
+          []  
         #met opponent's tile, add it to the waiting list
         true ->
           flip_helper(board, acc++[target], dir, posn, color)
