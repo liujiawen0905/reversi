@@ -42,6 +42,8 @@ defmodule Reversi.Game do
       |> Map.put(:board, new_board)
       |> Map.put(:on_going, new_on_going)
       |> Map.put(:current_player, next_player(game.current_player))
+    else
+      game
     end
   end
 
@@ -50,10 +52,6 @@ defmodule Reversi.Game do
     newRow = List.replace_at(row, y, %{x: x, y: y, color: color})
     newBoard = List.replace_at(board, x, newRow)
     newBoard
-  end
-
-  def check_finished(board) do
-    false
   end
 
   def next_player("black") do
@@ -112,7 +110,6 @@ defmodule Reversi.Game do
     |> Enum.at(y)
   end
 
-<<<<<<< HEAD
   #move is where the player placed a new chess (%{x, y})
   #direc represents which direction we are checking along (ex: {x:1, y:1} means top right)
   #posn is the position we will be checking next
@@ -135,6 +132,7 @@ defmodule Reversi.Game do
           flip_helper(board, acc++[target], dir, posn, color)
       end
     end
+  end
 
   defp check_finished(board) do
     check_list = Enum.map(board, fn(row) ->
