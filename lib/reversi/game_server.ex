@@ -20,12 +20,12 @@ defmodule Reversi.GameServer do
     GenServer.start_link(__MODULE__, state, name: reg(name))
   end
 
-  def get_state(pid) do
-    GenServer.call(pid, :get_state)
+  def get_state(name) do
+    GenServer.call(reg(name), :get_state)
   end
 
   def click(name, x, y) do
-    GenServer.call(reg(game), {:click, name, x, y})
+    GenServer.call(reg(name), {:click, name, x, y})
   end
 
   def init(state) do
