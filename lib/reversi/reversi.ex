@@ -13,6 +13,7 @@ defmodule Reversi.Game do
     %{
       board: game[:board],
       on_going: game[:on_going],
+      current_player: game.current_player
     }
   end
 
