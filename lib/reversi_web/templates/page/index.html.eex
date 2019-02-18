@@ -1,5 +1,12 @@
 <div class="row">
   <div class="column">
-    <h1> index page </h>
+    <h1>Join a Game</h1>
+    <form action="/game">
+      </br> 
+      <input id="text_field" type=text name="name" placeholder="RoomName">
+      <input id="text_field" type=text name="user" placeholder="RoomName">
+      </br>
+      <input type="submit" value="Enter Game">
+    </form>
   </div>
 </div>

@@ -1,12 +1,10 @@
 defmodule ReversiWeb.GamesChannelTest do
   use ReversiWeb.ChannelCase
 
-  alias ReversiWeb.GamesChannel
-
   setup do
     {:ok, _, socket} =
-      socket("user_id", %{some: :assign})
-      |> subscribe_and_join(GamesChannel, "games:lobby")
+      socket(ReversiWeb.UserSocket, "user_id", %{some: :assign})
+      |> subscribe_and_join(ReversiWeb.GamesChannel, "games:lobby")
 
     {:ok, socket: socket}
   end

@@ -23,6 +23,7 @@ defmodule ReversiWeb do
       import Plug.Conn
       import ReversiWeb.Router.Helpers
       import ReversiWeb.Gettext
+      alias MemoryWeb.Router.Helpers, as: Routes
     end
   end
 

@@ -36,7 +36,7 @@ defmodule Reversi.Game do
       Map.put(game, :players, [%{name: player_name, color: "black"}])
     else
       color = next_player(hd(game.players).color)
-      Map.put(game, :players, [%{name: player_name, color: color}])
+      Map.put(game, :players, game.players++[%{name: player_name, color: color}])
     end
   end
 

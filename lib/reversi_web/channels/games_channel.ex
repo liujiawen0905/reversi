@@ -27,7 +27,7 @@ defmodule ReversiWeb.GamesChannel do
     end
   end
 
-
+  # Add authorization logic here as required.
   def handle_in("click", %{x: x, y: y}, socket) do
     name=socket.assigns[:name]
     new_game=GameServer.click(name, x, y)

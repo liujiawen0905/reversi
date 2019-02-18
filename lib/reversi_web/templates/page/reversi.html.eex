@@ -1,0 +1,14 @@
+<script>
+  window.name = "<%= @name %>";
+  window.user = "<%= @user %>";
+</script>
+
+<div class="row">
+  <div class="column">
+    <h1> room: <%= @name %> </h1>
+    <h1> user: <%= @user %> </h1>
+    <div id="root">
+      React component loading...
+    </div>
+  </div>
+</div>

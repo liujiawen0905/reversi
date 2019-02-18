@@ -2,7 +2,7 @@ defmodule ReversiWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-   channel "games:*", ReversiWeb.RoomChannel
+   channel "games:*", ReversiWeb.GamesChannel
 
   ## Transports
   # transport :longpoll, Phoenix.Transports.LongPoll

@@ -11,8 +11,6 @@ defmodule ReversiWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/", from: :reversi, gzip: false,
-    from: :reversi, 
-    gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
@@ -41,21 +39,5 @@ defmodule ReversiWeb.Endpoint do
     store: :cookie,
     key: "_reversi_key",
     signing_salt: "1SrTBTpn"
-
   plug ReversiWeb.Router
-
-  @doc """
-  Callback invoked for dynamically configuring the endpoint.
-
-  It receives the endpoint configuration and checks if
-  configuration should be loaded from the system environment.
-  """
-  def init(_key, config) do
-    if config[:load_from_system_env] do
-      port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
-      {:ok, Keyword.put(config, :http, [:inet6, port: port])}
-    else
-      {:ok, config}
-    end
-  end
 end
