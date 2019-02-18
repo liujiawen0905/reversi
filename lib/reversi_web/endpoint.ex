@@ -1,7 +1,9 @@
 defmodule ReversiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :reversi
 
-  socket "/socket", ReversiWeb.UserSocket
+  socket "/socket", ReversiWeb.UserSocket, 
+    websocket: true, 
+    longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -9,6 +11,8 @@ defmodule ReversiWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/", from: :reversi, gzip: false,
+    from: :reversi, 
+    gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
@@ -20,11 +24,12 @@ defmodule ReversiWeb.Endpoint do
   end
 
   plug Plug.Logger
+  plug Plug.RequestId
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Phoenix.json_library()
 
   plug Plug.MethodOverride
   plug Plug.Head

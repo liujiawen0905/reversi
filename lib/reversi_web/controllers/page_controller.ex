@@ -5,7 +5,7 @@ defmodule ReversiWeb.PageController do
     render conn, "index.html"
   end
 
-  def game(conn, {%"name"=>name}) do
-    render conn, "reversi.html"
+  def game(conn, %{"name"=> name}) do
+    render conn, "reversi.html", name
   end
 end

@@ -13,6 +13,7 @@ defmodule Reversi.Application do
       # Start your own worker by calling: Reversi.Worker.start_link(arg1, arg2, arg3)
       # worker(Reversi.Worker, [arg1, arg2, arg3]),
       Reversi.GameSup,
+      Reversi.Backup,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

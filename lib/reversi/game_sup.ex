@@ -1,4 +1,4 @@
-defmodule Hangman.GameSup do
+defmodule Reversi.GameSup do
   use DynamicSupervisor
 
   def start_link(arg) do

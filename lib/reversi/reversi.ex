@@ -5,7 +5,9 @@ defmodule Reversi.Game do
     %{
       board: init_board(),
       on_going: true,
-      current_player: "black"
+      current_player: "black",
+      players: [],
+      spectators: []
       }
   end
 
@@ -13,8 +15,41 @@ defmodule Reversi.Game do
     %{
       board: game[:board],
       on_going: game[:on_going],
-      current_player: game.current_player
+      current_player: game.current_player,
+      players: game.players,
+      spectators: game.spectators
     }
+  end
+
+  def spectator_join(game, name) do
+    if not Enum.any?(game.spectators, fn x-> x.name==name end) do
+      new_list = game.spectators ++ [%{name: name}]
+      game = Map.put(game, :spectators, new_list)
+      game
+    else
+      game
+    end
+  end
+
+  def player_join(game, player_name) do
+    if game.players==[] do
+      Map.put(game, :players, [%{name: player_name, color: "black"}])
+    else
+      color = next_player(hd(game.players).color)
+      Map.put(game, :players, [%{name: player_name, color: color}])
+    end
+  end
+
+  def player_leave(game, name) do
+    new_players = Enum.filter(game.players, fn x -> x.name != name end)
+    new_game=init()
+    new_game=Map.put(new_game, :players, new_players)
+    new_game
+  end
+
+  def spectator_leave(game, name) do
+    temp = Enum.filter(game.spectators, fn x -> x.name != name end)
+    Map.put(game, :spectators, temp)
   end
 
   #generate initial board (8x8) [[]*8]
