@@ -18,13 +18,19 @@ class Reversi extends React.Component {
       players: [],
       spectators: []
     };
-    this.channel = props.channel;
+    this.channel = props.channel; 
+
+    this.channel.on("update", (game) => {
+      game["user_name"]=this.user_name;
+      this.setState(game);
+    });
     this.channel
       .join()
-      .receive("ok", this.init_state.bind(this))
+      .receive("ok", resp => {console.log(resp);})
       .receive("error", resp => {
         console.log(resp);
       });
+     
   }
 
   render() {

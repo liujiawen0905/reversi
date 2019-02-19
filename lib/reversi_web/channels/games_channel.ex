@@ -9,7 +9,7 @@ defmodule ReversiWeb.GamesChannel do
       GameServer.start(name)
       game=GameServer.get_state(name)
 
-      %{"user_name": user_name}=payload
+      %{"user"=> user_name}=payload
       if length(game.players)<2 do
         GameServer.user_join(name, "player", user_name)
       else
@@ -20,11 +20,17 @@ defmodule ReversiWeb.GamesChannel do
       |>assign(:name, name)
       |>assign(:game, game)
 
-      broadcast! socket, "update", game
+      send(self, {:joined, game})
+
       {:ok, %{"join"=> name, "game"=> Game.client_view(game)}, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
+  end
+
+  def handle_info({:joined, game}, socket) do
+    broadcast! socket, "update", game
+    {:noreply, socket}
   end
 
   # Add authorization logic here as required.
