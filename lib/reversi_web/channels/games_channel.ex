@@ -20,16 +20,15 @@ defmodule ReversiWeb.GamesChannel do
       |>assign(:name, name)
       |>assign(:game, game)
 
-      send(self, {:joined, game})
-
+      send(self, {:brcast_join, game})
       {:ok, %{"join"=> name, "game"=> Game.client_view(game)}, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
   end
 
-  def handle_info({:joined, game}, socket) do
-    broadcast! socket, "update", game
+  def handle_info({:brcast_join, game}, socket) do
+    broadcast socket, "update", game
     {:noreply, socket}
   end
 
@@ -37,8 +36,7 @@ defmodule ReversiWeb.GamesChannel do
   def handle_in("click", %{x: x, y: y}, socket) do
     name=socket.assigns[:name]
     new_game=GameServer.click(name, x, y)
-    socket.assign(socket, :game, new_game)
-    broadcast! socket, "update", new_game
+    broadcast socket, "update", new_game
     socket=assign(socket, :game, new_game)
     {:reply, {:ok, %{game: Game.client_view(new_game)}}, socket}
   end

@@ -1,0 +1,88 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import _ from "lodash";
+
+export default function game_init(root, channel, user) {
+    ReactDOM.render(<Reversi channel={channel} user={user} />, root);
+}
+
+class Reversi extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_name: props.user,
+      board: [],
+      on_going: true,
+      current_player: "black",
+      players: [],
+      spectators: []
+    };
+    this.channel = props.channel;
+
+    this.channel.on("update", (game) => {
+      game["user_name"]=this.user_name;
+      this.setState(game);
+    });
+    this.channel
+      .join()
+      .receive("ok", resp => {console.log(resp);})
+      .receive("error", resp => {
+        console.log(resp);
+      });
+
+  }
+
+  init_state(game) {
+    this.setState(game);
+  }
+  
+  isPlayer(name) {
+    return Object.keys(this.state.players).indexOf(name) >=0;
+  }
+  cilck(x, y) {
+    name=this.state.user_name;
+    if(this.isPlayer(name)) {
+       if(this.state.players[name]==this.state.current_player) {
+	   this.channel.push("click", {x: x, y: y})
+	       .receive("ok", this.init_state.bind(this));
+       }
+    }
+  }
+
+  render() {
+     console.log("render")
+     return (
+           <div> <h1>{this.user}</h1>
+	   <RenderBoard board={this.state.board} click={this.click.bind(this)} />
+           </div>
+     )
+  }
+}
+
+function RenderBoard(props) {
+   result=[];
+   for(x in props.board) {
+     row=[];
+     for(y in props.board[x]) {
+	target=props.board[y][x];
+	if(target.color=="black") {
+	   row.push(<button>B</button>)
+	}
+	if(target.color=="white") {
+	   row.push(<button>W</button>)
+	}
+	else {
+           row.push(<button onClick={() => props.click(x, y)}> " " </button>)
+	}
+     }
+      result.push(<span>row</span>)
+   }
+   return (
+     <div>{result}</div>
+   );
+}
+
+
+
+
+
