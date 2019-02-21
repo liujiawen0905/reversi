@@ -33,17 +33,25 @@ defmodule ReversiWeb.GamesChannel do
   end
 
   # Add authorization logic here as required.
-  def handle_in("click", %{x: x, y: y}, socket) do
+  def handle_in("click", %{"x"=> x, "y"=> y}, socket) do
     name=socket.assigns[:name]
+    x=String.to_integer(x)
+    y=String.to_integer(y)
     new_game=GameServer.click(name, x, y)
     broadcast socket, "update", new_game
     socket=assign(socket, :game, new_game)
     {:reply, {:ok, %{game: Game.client_view(new_game)}}, socket}
   end
 
+  def handle_in("reset", _payload, socket) do
+    name=socket.assigns[:name]
+    game=GameServer.reset(name)
+    {:reply, {:ok, %{game: Game.client_view(game)}}, socket}
+  end
+
   #when a user leave
   #payload is %{"type": "player/spectator", "user_name": name}
-  def handle_in("leave", %{"type": type, "user_name": user_name}, socket) do
+  def handle_in("leave", %{"type"=> type, "user_name"=> user_name}, socket) do
     game=socket.assigns[:game]
     name=socket.assigns[:name]
     if type == "players" do

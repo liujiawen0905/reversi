@@ -35,6 +35,10 @@ defmodule Reversi.GameServer do
   def user_leave(name, type, user_name) do
     GenServer.call(reg(name), {:user_leave, name, type, user_name})
   end
+  
+  def reset(name) do
+    GenServer.call(reg(name), {:reset, name})
+  end
 
   def click(name, x, y) do
     GenServer.call(reg(name), {:click, name, x, y})
@@ -77,6 +81,12 @@ defmodule Reversi.GameServer do
     Backup.put(name, state)
     {:reply, state, state}
   end
-
+  
+  def handle_call({:reset, name}, _from, states) do
+    game = Backup.get(name)
+    new_game=Game.reset_board(game)
+    Backup.put(name, new_game)
+    {:reply, new_game, new_game}
+  end
 
 end

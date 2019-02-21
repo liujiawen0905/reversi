@@ -20,6 +20,12 @@ defmodule Reversi.Game do
       spectators: game.spectators
     }
   end
+  
+  def reset_board(game) do
+    new_game=game
+             |> Map.put(:board, init_board())
+  end
+
 
   def spectator_join(game, name) do
     if not Enum.any?(game.spectators, fn x-> x.name==name end) do
@@ -61,11 +67,11 @@ defmodule Reversi.Game do
       Enum.map(xy, fn(b) ->
         cond do
           (a==3 and b==4) or (a==4 and b==3) -> 
-            %{x: a, y: b, color: "black"}
+              %{x: a, y: b, color: "black"}
           (a==3 and b==3) or (a==4 and b==4) ->
-            %{x: a, y: b, color: "white"} 
+              %{x: a, y: b, color: "white"} 
           true ->
-            %{x: a, y: b, color: ""}
+              %{x: a, y: b, color: ""}
         end 
       end) 
     end)

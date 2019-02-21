@@ -42,6 +42,34 @@ class Reversi extends React.Component {
     }
     return -1;
   }
+  
+  getSpectator(name) {
+    for(var k in this.state.spectators) {
+       if(this.state.spectators[k].name==name) {
+         return k;
+       }
+    }
+    return -1;
+  }
+
+  reset() {
+   //only a player can reset the game
+   if(this.getPlayer(this.user)>0) {
+      this.channel.push("reset", {}).receive("ok", this.init_state.bind(this));
+   }
+  }
+  
+  leave() {
+    var type="";
+    //check if this user is a player
+    if(this.getPlayer(this.user)>=0) {
+      type="player";
+    }
+    else {
+      type="spectator";
+    }
+    this.channel.push("leave", {type: type, user_name: this.user}, socket)
+  }
 
   click(x, y) {
     let idx = this.getPlayer(this.user);
@@ -53,9 +81,10 @@ class Reversi extends React.Component {
     }
   }
   render() {
-     console.log("render")
+//     console.log(this.state.board)
+     var len=this.state.players.length;
      return (
-           <div> <h1>{this.user}</h1>
+           <div> <h1>{len}</h1>
            <RenderBoard board={this.state.board} click={this.click.bind(this)} />
            </div>
      );
@@ -67,18 +96,20 @@ function RenderBoard(props) {
    for(var x in props.board) {
      var row=[];
      for(var y in props.board[x]) {
-        var target=props.board[y][x];
+        var target=props.board[x][y];
         if(target.color=="black") {
            row.push(<button>B</button>)
         }
-        if(target.color=="white") {
+        else if(target.color=="white") {
            row.push(<button>W</button>)
         }
         else {
-           row.push(<button onClick={() => props.click(x, y)}> " " </button>)
+           let x_cp=x;
+	   let y_cp=y;
+           row.push(<button onClick={() => props.click(x_cp, y_cp)}> " " </button>)
         }
      }
-      result.push(<span>{row}</span>)
+      result.push(<p>{row}</p>)
    }
    return (
      <div>{result}</div>
