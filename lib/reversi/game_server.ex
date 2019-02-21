@@ -12,7 +12,7 @@ defmodule Reversi.GameServer do
       type: :worker,
     }
     Reversi.GameSup.start_child(spec)
-  end 
+  end
 
   def reg(name) do
     {:via, Registry, {Reversi.GameReg, name}}
@@ -34,10 +34,6 @@ defmodule Reversi.GameServer do
 
   def user_leave(name, type, user_name) do
     GenServer.call(reg(name), {:user_leave, name, type, user_name})
-  end
-  
-  def reset(name) do
-    GenServer.call(reg(name), {:reset, name})
   end
 
   def click(name, x, y) do
@@ -62,7 +58,7 @@ defmodule Reversi.GameServer do
     state=Game.spectator_join(states, user_name)
     Backup.put(name, state)
     {:reply, state, state}
-  end 
+  end
 
   def handle_call({:user_leave, name, "player", user_name}, _from, states) do
     state=Game.player_leave(states, user_name)
@@ -81,12 +77,6 @@ defmodule Reversi.GameServer do
     Backup.put(name, state)
     {:reply, state, state}
   end
-  
-  def handle_call({:reset, name}, _from, states) do
-    game = Backup.get(name)
-    new_game=Game.reset_board(game)
-    Backup.put(name, new_game)
-    {:reply, new_game, new_game}
-  end
+
 
 end

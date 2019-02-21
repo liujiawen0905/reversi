@@ -20,12 +20,6 @@ defmodule Reversi.Game do
       spectators: game.spectators
     }
   end
-  
-  def reset_board(game) do
-    new_game=game
-             |> Map.put(:board, init_board())
-  end
-
 
   def spectator_join(game, name) do
     if not Enum.any?(game.spectators, fn x-> x.name==name end) do
@@ -66,14 +60,14 @@ defmodule Reversi.Game do
     cells = Enum.map(xy, fn(a) ->
       Enum.map(xy, fn(b) ->
         cond do
-          (a==3 and b==4) or (a==4 and b==3) -> 
-              %{x: a, y: b, color: "black"}
+          (a==3 and b==4) or (a==4 and b==3) ->
+            %{x: a, y: b, color: "black"}
           (a==3 and b==3) or (a==4 and b==4) ->
-              %{x: a, y: b, color: "white"} 
+            %{x: a, y: b, color: "white"}
           true ->
-              %{x: a, y: b, color: ""}
-        end 
-      end) 
+            %{x: a, y: b, color: ""}
+        end
+      end)
     end)
     cells
   end
@@ -124,7 +118,7 @@ defmodule Reversi.Game do
     posn=%{x: x, y: y}
     waiting_list=[]
     waiting_list
-    #check right 
+    #check right
     |> Enum.concat(flip_helper(board, [], %{x: 1, y: 0}, posn, color))
     #check left
     |> Enum.concat(flip_helper(board, [], %{x: -1, y: 0}, posn, color))
@@ -144,7 +138,7 @@ defmodule Reversi.Game do
 
   def flip_all(wl, board) do
     new_board = board
-    Enum.map(new_board, fn col -> 
+    Enum.map(new_board, fn col ->
       Enum.map(col, fn cell ->
         if cell in wl do
           Map.put(cell, :color, next_player(cell.color))
@@ -178,11 +172,11 @@ defmodule Reversi.Game do
       target = get_grid(board, posn.x, posn.y)
       cond do
         #met a same color tile, acc contains all grids that need to be flipped in this direction
-        target.color==color -> 
+        target.color==color ->
           acc
         #met an empty tile along the way, stop searching
         target.color=="" ->
-          []  
+          []
         #met opponent's tile, add it to the waiting list
         true ->
           flip_helper(board, acc++[target], dir, posn, color)
@@ -201,13 +195,3 @@ defmodule Reversi.Game do
       end
   end
 end
-
-
-
-
-
-
-
-
-
-

@@ -17,7 +17,7 @@ class Reversi extends React.Component {
       spectators: []
     };
     this.user=props.user
-    this.channel = props.channel; 
+    this.channel = props.channel;
     this.channel.on("update", (game) => {
     this.setState(game);
     console.log("update");
@@ -33,7 +33,7 @@ class Reversi extends React.Component {
   init_state(props) {
     this.setState(props.game);
   }
-  
+
   getPlayer(name) {
     for(var k in this.state.players) {
        if(this.state.players[k].name==name) {
@@ -42,7 +42,7 @@ class Reversi extends React.Component {
     }
     return -1;
   }
-  
+
   getSpectator(name) {
     for(var k in this.state.spectators) {
        if(this.state.spectators[k].name==name) {
@@ -58,7 +58,7 @@ class Reversi extends React.Component {
       this.channel.push("reset", {}).receive("ok", this.init_state.bind(this));
    }
   }
-  
+
   leave() {
     var type="";
     //check if this user is a player
@@ -103,15 +103,19 @@ function RenderBoard(props) {
      for(var y in props.board[x]) {
         var target=props.board[x][y];
         if(target.color=="black") {
-           row.push(<button>B</button>)
+           row.push(<button><img src="/images/black_button.png" alt="black_image"/>
+					 </button>)
         }
         else if(target.color=="white") {
-           row.push(<button>W</button>)
+           row.push(<button><img src="/images/white_button.png" alt="white_image"
+					 style={{width:"20", height:"20"}} /></button>)
         }
         else {
            let x_cp=x;
-	   let y_cp=y;
-           row.push(<button onClick={() => props.click(x_cp, y_cp)}> " " </button>)
+	         let y_cp=y;
+           row.push(<button onClick={() => props.click(x_cp, y_cp)}>
+					 <img src="/images/empty_button.png" alt="empty_image"/>
+					 </button>)
         }
      }
       result.push(<p>{row}</p>)
@@ -121,13 +125,27 @@ function RenderBoard(props) {
    );
 }
 
-function RenderUserList(props) {
-  let list=props.all;
-  
+
+function RenderPlayers(props) {
+	var result = [];
+	for(let i in props.players) {
+		let target = props.players[i].name
+
+		result.push(<h1>{target}</h1>)
+	}
+	return (
+		<div>{result}</div>
+	);
 }
 
+function RenderSpectators(props) {
+	var result = [];
+	for(let i in props.spectators) {
+		let target = props.spectators[i].name
 
-
-
-
-
+		result.push(<h1>{target}</h1>)
+	}
+	return (
+		<div>{result}</div>
+	);
+}
