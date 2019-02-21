@@ -18,13 +18,14 @@ defmodule ReversiWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
+  def connect(params, socket) do
+    socket=assign(socket, :user, params["token"])
     {:ok, socket}
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
   #
-  #     def id(socket), do: "user_socket:#{socket.assigns.user_id}"
+ def id(socket), do: "user_socket:#{socket.assigns.user}"
   #
   # Would allow you to broadcast a "disconnect" event and terminate
   # all active sockets and channels for a given user:
@@ -32,5 +33,5 @@ defmodule ReversiWeb.UserSocket do
   #     ReversiWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
-  def id(_socket), do: nil
+  #def id(_socket), do: nil
 end

@@ -51,7 +51,7 @@ defmodule ReversiWeb.GamesChannel do
 
   #when a user leave
   #payload is %{"type": "player/spectator", "user_name": name}
-  def handle_in("leave", %{"type"=> type, "user_name"=> user_name}, socket) do
+  def handle_in("leave", %{"type"=> type, "user"=> user_name}, socket) do
     game=socket.assigns[:game]
     name=socket.assigns[:name]
     if type == "players" do
@@ -59,9 +59,8 @@ defmodule ReversiWeb.GamesChannel do
     else
       game=GameServer.user_leave(name, "spectator", user_name)
     end
-    socket.assign(:game, game)
-    broadcast! socket, "update", game
-    {:reply, {:ok, %{game: Game.client_view(game)}}, socket}
+    broadcast socket, "update", game
+    {:stop, :shutdown, socket}
   end
 
   # Add authorization logic here as required.

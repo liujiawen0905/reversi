@@ -62,13 +62,15 @@ class Reversi extends React.Component {
   leave() {
     var type="";
     //check if this user is a player
+    console.log("leave");
     if(this.getPlayer(this.user)>=0) {
       type="player";
     }
     else {
       type="spectator";
     }
-    this.channel.push("leave", {type: type, user_name: this.user}, socket)
+    this.channel.push("leave", {type: type, user: this.user})
+    window.location.replace("http://127.0.0.1:4000")
   }
 
   click(x, y) {
@@ -83,9 +85,12 @@ class Reversi extends React.Component {
   render() {
 //     console.log(this.state.board)
      var len=this.state.players.length;
+     var type = ((this.getPlayer(this.user)>0)? "player" : "spectator");
      return (
            <div> <h1>{len}</h1>
            <RenderBoard board={this.state.board} click={this.click.bind(this)} />
+	   <button onClick={this.leave.bind(this)}>leave</button>
+	   <button onClick={this.reset.bind(this)}>leave</button>
            </div>
      );
   }
@@ -115,4 +120,14 @@ function RenderBoard(props) {
      <div>{result}</div>
    );
 }
+
+function RenderUserList(props) {
+  let list=props.all;
+  
+}
+
+
+
+
+
 
