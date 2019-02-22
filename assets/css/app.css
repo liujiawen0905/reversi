@@ -2,12 +2,16 @@
 
 #text_field{
   text-align: center;
+  font-size: 20px;
+  margin-top: 10px
 }
 
 #btn_field{
-  border-radius: 15px;
-  padding: 15px 25px;
+  border-radius: 20px;
   background-color: #4CAF50;
+  cursor: pointer;
+  font-size: 20px;
+  margin-top: 20px;
 }
 
 form {
@@ -20,7 +24,7 @@ h2{
   text-align: center;
   font-style: italic;
   font-size: 40px;
-  color: red;
+  color: darkblue;
 }
 
 h1{
@@ -31,7 +35,7 @@ h1{
 
 img{
   width: 40px;
-  height: 40px;
+  length: 40px;
 }
 
 div{
@@ -40,5 +44,38 @@ div{
 
 #main{
   display: inline-flex;
+}
 
+#list{
+  padding-left: 200px;
+}
+
+#btn{
+border-style: solid;
+border-radius: 20px;
+border-color: green;
+background-color: lightgreen;
+font-size: 30px;
+margin-left: 130px;
+margin-top: 20px;
+}
+
+#game_btn{
+  background-color: green;
+  padding: 4px;
+  height:50px;
+  width:50px;
+}
+
+.board_table{
+  margin-left: 80px;
+}
+
+p{
+  font-size: 25px;
+  font-style: italic;
+}
+
+#winner{
+  margin-left: 100px;
 }
