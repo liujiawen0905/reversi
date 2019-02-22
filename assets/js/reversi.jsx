@@ -87,22 +87,20 @@ class Reversi extends React.Component {
      var len=this.state.players.length;
      var type = ((this.getPlayer(this.user)>0)? "player" : "spectator");
      return (
-     <div>
        <div id="main">
            <RenderBoard id="RenderBoard" board={this.state.board} click={this.click.bind(this)} />
-	   <div>
-	     <h2>Players</h2>
-	     <RenderPlayers players={this.state.players}/>
-	     <h2>Spectators</h2>
-	     <RenderSpectators spectators={this.state.spectators}/>
-	   </div>
+					 <div>
+					 <h2>Players</h2>
+					 <RenderPlayers players={this.state.players}/>
+					 <h2>Spectators</h2>
+					 <RenderSpectators spectators={this.state.spectators}/>
+					 </div>
       </div>
-	   <div>
-	     <button onClick={this.leave.bind(this)}>leave</button>
-	     <button onClick={this.reset.bind(this)}>reset</button>
-           </div>
-	   <RenderWinner players={this.state.players} winner={this.state.winner} />
+			<div>
+			<button onClick={this.leave.bind(this)}>leave</button>
+			<button onClick={this.reset.bind(this)}>reset</button>
       </div>
+			</div>
 		 );
   }
 }
