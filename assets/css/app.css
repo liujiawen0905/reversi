@@ -1,1 +1,44 @@
 /* This file is for your main application css. */
+
+#text_field{
+  text-align: center;
+}
+
+#btn_field{
+  border-radius: 15px;
+  padding: 15px 25px;
+  background-color: #4CAF50;
+}
+
+form {
+  text-align: center;
+  background-color: lightblue;
+  color: white;
+}
+
+h2{
+  text-align: center;
+  font-style: italic;
+  font-size: 40px;
+  color: red;
+}
+
+h1{
+  text-align: center;
+  font-style: normal;
+  font-size: 40px;
+}
+
+img{
+  width: 40px;
+  height: 40px;
+}
+
+div{
+  background-color: lightblue;
+}
+
+#main{
+  display: inline-flex;
+
+}
