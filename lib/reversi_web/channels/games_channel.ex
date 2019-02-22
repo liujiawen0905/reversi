@@ -11,8 +11,10 @@ defmodule ReversiWeb.GamesChannel do
 
       %{"user"=> user_name}=payload
       if length(game.players)<2 do
+        IO.puts("user join----------")
         GameServer.user_join(name, "player", user_name)
       else
+        IO.puts("spect join---------")
         GameServer.user_join(name, "spectator", user_name)
       end
       game=GameServer.get_state(name)
@@ -54,13 +56,16 @@ defmodule ReversiWeb.GamesChannel do
   def handle_in("leave", %{"type"=> type, "user"=> user_name}, socket) do
     game=socket.assigns[:game]
     name=socket.assigns[:name]
-    if type == "players" do
+    if type == "player" do
+      IO.puts("player leave")
       game= GameServer.user_leave(name, "player", user_name)
+      broadcast socket, "update", game
+      {:stop, :shutdown, socket}
     else
       game=GameServer.user_leave(name, "spectator", user_name)
+      broadcast socket, "update", game
+      {:stop, :shutdown, socket}
     end
-    broadcast socket, "update", game
-    {:stop, :shutdown, socket}
   end
 
   # Add authorization logic here as required.

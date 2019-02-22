@@ -87,12 +87,23 @@ class Reversi extends React.Component {
      var len=this.state.players.length;
      var type = ((this.getPlayer(this.user)>0)? "player" : "spectator");
      return (
-           <div> <h1>{len}</h1>
-           <RenderBoard board={this.state.board} click={this.click.bind(this)} />
-	   <button onClick={this.leave.bind(this)}>leave</button>
-	   <button onClick={this.reset.bind(this)}>leave</button>
+     <div>
+       <div id="main">
+           <RenderBoard id="RenderBoard" board={this.state.board} click={this.click.bind(this)} />
+	   <div>
+	     <h2>Players</h2>
+	     <RenderPlayers players={this.state.players}/>
+	     <h2>Spectators</h2>
+	     <RenderSpectators spectators={this.state.spectators}/>
+	   </div>
+      </div>
+	   <div>
+	     <button onClick={this.leave.bind(this)}>leave</button>
+	     <button onClick={this.reset.bind(this)}>reset</button>
            </div>
-     );
+	   <RenderWinner players={this.state.players} winner={this.state.winner} />
+      </div>
+		 );
   }
 }
 
@@ -103,19 +114,15 @@ function RenderBoard(props) {
      for(var y in props.board[x]) {
         var target=props.board[x][y];
         if(target.color=="black") {
-           row.push(<button><img src="/images/black_button.png" alt="black_image"/>
-					 </button>)
+           row.push(<button><img src="/images/black_button.png" alt="black_image"/></button>)
         }
         else if(target.color=="white") {
-           row.push(<button><img src="/images/white_button.png" alt="white_image"
-					 style={{width:"20", height:"20"}} /></button>)
+           row.push(<button><img src="/images/white_button.png" alt="white_image" /></button>)
         }
         else {
            let x_cp=x;
-	         let y_cp=y;
-           row.push(<button onClick={() => props.click(x_cp, y_cp)}>
-					 <img src="/images/empty_button.png" alt="empty_image"/>
-					 </button>)
+	   let y_cp=y;
+           row.push(<button onClick={() => props.click(x_cp, y_cp)}> <img src="/images/empty_button.png" alt="empty_image"/></button>)
         }
      }
       result.push(<p>{row}</p>)
@@ -149,3 +156,19 @@ function RenderSpectators(props) {
 		<div>{result}</div>
 	);
 }
+
+function RenderWinner(props) {
+  if(props.players.length<2) {
+    return (<p id="winner">Waiting for another player</p>);
+  }
+  switch(props.winner) {
+	case "":
+	  return (<p id="winner">In Game</p>);
+	default:
+	  return (<p id="winner">{props.winner} wins! </p>);
+  }
+}
+
+
+
+

@@ -62,12 +62,14 @@ defmodule Reversi.GameServer do
 
   def handle_call({:user_leave, name, "player", user_name}, _from, states) do
     state=Game.player_leave(states, user_name)
+    IO.inspect(state.players)
     Backup.put(name, state)
     {:reply, state, state}
   end
 
   def handle_call({:user_leave, name, "spectator", user_name}, _from, states) do
     state=Game.spectator_leave(states, user_name)
+    IO.inspect(state.players)
     Backup.put(name, state)
     {:reply, state, state}
   end

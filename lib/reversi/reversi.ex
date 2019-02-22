@@ -7,7 +7,8 @@ defmodule Reversi.Game do
       on_going: true,
       current_player: "black",
       players: [],
-      spectators: []
+      spectators: [],
+      winner: ""
       }
   end
 
@@ -17,7 +18,8 @@ defmodule Reversi.Game do
       on_going: game[:on_going],
       current_player: game.current_player,
       players: game.players,
-      spectators: game.spectators
+      spectators: game.spectators,
+      winner: game.winner
     }
   end
 
@@ -43,8 +45,9 @@ defmodule Reversi.Game do
   def player_leave(game, name) do
     new_players = Enum.filter(game.players, fn x -> x.name != name end)
     new_game=init()
-    new_game=Map.put(new_game, :players, new_players)
     new_game
+    |> Map.put(:players, new_players)
+    |> Map.put(:spectators, game.spectators)
   end
 
   def spectator_leave(game, name) do
@@ -83,14 +86,20 @@ defmodule Reversi.Game do
       new_board = flip_all(flips, game.board)
       new_board = add_chess(new_board, x, y, color)
       #3)check if game ends
-      new_on_going = not check_finished(new_board)
       #4)update game state (board, next_player, on_going)
       game
       |> Map.put(:board, new_board)
-      |> Map.put(:on_going, new_on_going)
       |> Map.put(:current_player, next_player(game.current_player))
+      |> Map.put(:winner, get_winner(game))
+      |> Map.put(:on_going, game.winner=="")
     else
-      game
+      if not can_move(game) do
+        game
+        |> Map.put(:on_going, false)
+        |> Map.put(:winner, next_player(game.current_player))
+      else
+        game
+      end
     end
   end
 
@@ -184,14 +193,50 @@ defmodule Reversi.Game do
     end
   end
 
-  defp check_finished(board) do
-    check_list = Enum.map(board, fn(row) ->
-      Enum.find(row, 0,fn(map) -> map[:color] == "" end) end)
-
-      if Enum.all?(check_list, fn(x) -> x == 0 end) do
-        true
-      else
-        false
-      end
+  # count number of grid in given color
+  def count_color(board, color) do
+    Enum.reduce(board, 0, fn row, acc -> acc +   
+      Enum.reduce(row, 0, fn x, acc ->  
+        if x.color==color do
+          acc + 1
+        else 
+          acc
+        end
+      end)
+    end)
   end
+
+  def full_board(board) do
+    all=Enum.concat(board);
+    not Enum.any?(all, fn x -> x.color == "" end)
+  end
+
+  #return "" if there is no winner
+  #return winner's name if there is one
+  def get_winner(game) do
+    cond do
+      full_board(game.board) ->
+        black= count_color(game.board, "black")
+        white = count_color(game.board, "white")
+        if black > white do
+          "black"
+        else
+          "white"
+        end
+      true ->
+        ""
+    end
+  end
+
+  #check if this user can place a chess on the board
+  def can_move(game) do
+    all = Enum.concat(game.board)
+    Enum.any?(all, fn item -> valid_move(game, item.x, item.y) end)
+  end
+
 end
+
+
+
+
+
