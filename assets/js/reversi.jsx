@@ -54,7 +54,7 @@ class Reversi extends React.Component {
 
   reset() {
    //only a player can reset the game
-   if(this.getPlayer(this.user)>0) {
+   if(this.getPlayer(this.user)>=0) {
       this.channel.push("reset", {}).receive("ok", this.init_state.bind(this));
    }
   }

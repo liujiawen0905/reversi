@@ -28,6 +28,10 @@ defmodule Reversi.GameServer do
     GenServer.call(reg(name), :get_state)
   end
 
+  def reset(name) do
+    GenServer.call(reg(name), {:reset, name})
+  end
+
   def user_join(name, type, user_name) do
     GenServer.call(reg(name), {:user_join, name, type, user_name})
   end
@@ -46,6 +50,14 @@ defmodule Reversi.GameServer do
 
   def handle_call(:get_state, _from, states) do
     {:reply, states, states}
+  end
+
+  def handle_call({:reset, name}, _from, states) do
+    game=Game.init()
+    |> Map.put(:players, states.players)
+    |> Map.put(:spectators, states.spectators)
+    Backup.put(name, game)
+    {:reply, game, game}
   end
 
   def handle_call({:user_join, name, "player", user_name}, _from, states) do
