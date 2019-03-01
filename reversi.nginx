@@ -3,7 +3,7 @@ server {
     listen [::]:80;
 
     # TODO: This should be your server name.
-    server_name reversi.zy-peng.com;
+    server_name reversi.jiawensuperman.me;
 
     location / {
         proxy_pass http://localhost:5000;
